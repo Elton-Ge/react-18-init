@@ -10,8 +10,7 @@ interface Post {
 export default function ExampleQuery() {
   const { isLoading, error, data } = useQuery<Post[]>({
     queryKey: ['posts'],
-    queryFn: () =>
-      fetch('https://jsonplaceholder.typicode.com/posts').then((res) => res.json()),
+    queryFn: () => fetch('https://jsonplaceholder.typicode.com/posts').then((res) => res.json()),
   });
 
   if (isLoading) {
@@ -24,9 +23,15 @@ export default function ExampleQuery() {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
         <strong className="font-bold">Error!</strong>
-        <span className="block sm:inline"> {error instanceof Error ? error.message : 'An error occurred'}</span>
+        <span className="block sm:inline">
+          {' '}
+          {error instanceof Error ? error.message : 'An error occurred'}
+        </span>
       </div>
     );
   }
@@ -36,7 +41,10 @@ export default function ExampleQuery() {
       <h2 className="text-2xl font-bold mb-4">Posts from JSONPlaceholder</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data?.slice(0, 6).map((post) => (
-          <div key={post.id} className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
+          <div
+            key={post.id}
+            className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow"
+          >
             <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
             <p className="text-gray-600">{post.body.substring(0, 100)}...</p>
           </div>
