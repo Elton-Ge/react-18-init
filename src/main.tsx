@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')!).render(
         }
       >
         <App />
-        <div className="container mx-auto py-8 px-4 bg-red-100">
+        <div className="container mx-auto py-8 p-4 bg-blue-100">
           <ExampleQuery />
         </div>
       </Suspense>
