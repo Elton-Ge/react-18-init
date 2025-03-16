@@ -7,7 +7,7 @@ interface Post {
   userId: number;
 }
 
-export function ExampleQuery() {
+export default function ExampleQuery() {
   const { isLoading, error, data } = useQuery<Post[]>({
     queryKey: ['posts'],
     queryFn: () =>

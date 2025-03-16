@@ -2,16 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ExampleQuery } from './components/ExampleQuery'
 
 function App() {
   const [count, setCount] = useState(0)
-  const queryClient = new QueryClient()
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="container mx-auto py-8 px-4 bg-green-500">
+    <div className="container mx-auto py-8 px-4 bg-green-500">
         <div className="flex justify-center space-x-4 mb-6">
           <a href="https://vite.dev" target="_blank" className="hover:opacity-80 transition-opacity">
             <img src={viteLogo} className="h-24" alt="Vite logo" />
@@ -37,15 +33,10 @@ function App() {
           </div>
         </div>
         
-        {/* <div className="mb-8">
-          <ExampleQuery />
-        </div> */}
-        
         <p className="text-center text-gray-500 dark:text-gray-400">
           Click on the Vite and React logos to learn more
         </p>
       </div>
-    </QueryClientProvider>
   )
 }
 
