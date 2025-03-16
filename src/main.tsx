@@ -4,7 +4,6 @@ import './index.css'
 import App from './App.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-// 使用 import() 时需要确保导入的模块有默认导出
 const ExampleQuery = lazy(() => import('./components/ExampleQuery'))
 const queryClient = new QueryClient()
 
