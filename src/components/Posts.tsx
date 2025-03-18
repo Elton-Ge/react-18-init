@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 
-interface Post {
+export interface Post {
   id: number;
   title: string;
   body: string;
   userId: number;
 }
 
-export default function ExampleQuery() {
+const Posts = () => {
+  const navigate = useNavigate();
   const { isLoading, error, data } = useQuery<Post[]>({
     queryKey: ['posts'],
     queryFn: () => fetch('https://jsonplaceholder.typicode.com/posts').then((res) => res.json()),
@@ -43,7 +45,11 @@ export default function ExampleQuery() {
         {data?.slice(0, 6).map((post) => (
           <div
             key={post.id}
-            className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow"
+            className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => {
+              console.log(post);
+              navigate({ to: `/posts/${post.id}` });
+            }}
           >
             <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
             <p className="text-gray-600">{post.body.substring(0, 100)}...</p>
@@ -52,4 +58,5 @@ export default function ExampleQuery() {
       </div>
     </div>
   );
-}
+};
+export default Posts;
