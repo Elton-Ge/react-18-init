@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { PostType } from './Posts';
+import { Link } from '@tanstack/react-router';
 
 const Post = ({ postId }: { postId: string }) => {
   const { isLoading, error, data } = useQuery<PostType>({
@@ -15,31 +16,76 @@ const Post = ({ postId }: { postId: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center p-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="container mx-auto p-8">
+        <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+          <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div className="space-y-3">
+            <div className="h-4 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div
-        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <strong className="font-bold">Error!</strong>
-        <span className="block sm:inline">
-          {error instanceof Error ? error.message : 'An error occurred'}
-        </span>
+      <div className="container mx-auto p-8">
+        <div
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md"
+          role="alert"
+        >
+          <div className="flex items-center">
+            <svg
+              className="h-6 w-6 text-red-500 mr-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <div>
+              <p className="font-bold">Error</p>
+              <p>{error instanceof Error ? error.message : 'An error occurred'}</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="border border-blue-400 p-2 flex flex-col gap-3 mt-2">
-      <div>Post ID: {postId}</div>
-      <div>Post title: {data?.title}</div>
-      <div>Post body: {data?.body}</div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+        <div className="text-sm text-gray-500 mb-4">Post ID: {postId}</div>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">{data?.title}</h1>
+        <div className="prose prose-lg text-gray-600">
+          <p className="whitespace-pre-wrap">{data?.body}</p>
+        </div>
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <Link
+            to="/posts"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to Posts
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
