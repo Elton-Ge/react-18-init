@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Post } from './Posts';
+import { PostType } from './Posts';
 
 const Post = ({ postId }: { postId: string }) => {
-  const { isLoading, error, data } = useQuery<Post>({
+  const { isLoading, error, data } = useQuery<PostType>({
     queryKey: ['posts', postId],
     queryFn: async () => {
       const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`);

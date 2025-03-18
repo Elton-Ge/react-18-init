@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 
-export interface Post {
-  id: number;
+export interface PostType {
+  id: string;
   title: string;
   body: string;
   userId: number;
 }
 
 const Posts = () => {
-  const navigate = useNavigate();
-  const { isLoading, error, data } = useQuery<Post[]>({
+  const { isLoading, error, data } = useQuery<PostType[]>({
     queryKey: ['posts'],
     queryFn: () => fetch('https://jsonplaceholder.typicode.com/posts').then((res) => res.json()),
   });
@@ -31,7 +30,6 @@ const Posts = () => {
       >
         <strong className="font-bold">Error!</strong>
         <span className="block sm:inline">
-          {' '}
           {error instanceof Error ? error.message : 'An error occurred'}
         </span>
       </div>
@@ -43,17 +41,15 @@ const Posts = () => {
       <h2 className="text-2xl font-bold mb-4">Posts from JSONPlaceholder</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data?.slice(0, 6).map((post) => (
-          <div
+          <Link
             key={post.id}
             className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => {
-              console.log(post);
-              navigate({ to: `/posts/${post.id}` });
-            }}
+            to="/posts/$postId"
+            params={{ postId: post.id }}
           >
             <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
             <p className="text-gray-600">{post.body.substring(0, 100)}...</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
