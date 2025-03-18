@@ -1,11 +1,21 @@
-import { StrictMode, Suspense, lazy } from 'react';
+import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
-import App from './App.tsx';
+// import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+// Import the generated route tree
+import { routeTree } from './routeTree.gen';
 
-const ExampleQuery = lazy(() => import('./components/ExampleQuery'));
 const queryClient = new QueryClient();
+// Create a new router instance
+const router = createRouter({ routeTree });
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,10 +27,7 @@ createRoot(document.getElementById('root')!).render(
           </div>
         }
       >
-        <App />
-        <div className="container mx-auto py-8 p-4 bg-blue-100">
-          <ExampleQuery />
-        </div>
+        <RouterProvider router={router} />
       </Suspense>
     </QueryClientProvider>
   </StrictMode>

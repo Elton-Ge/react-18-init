@@ -19,7 +19,14 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* TanStack Router */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "baseUrl": ".",
+    "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src", "*.d.ts"]
 }
