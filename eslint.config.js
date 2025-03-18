@@ -6,6 +6,7 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import tailwindcss from 'eslint-plugin-tailwindcss';
 
 export default [
   { ignores: ['dist'] },
@@ -25,6 +26,7 @@ export default [
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'jsx-a11y': jsxA11y,
+      tailwindcss: tailwindcss,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -32,6 +34,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'tailwindcss/no-custom-classname': 'off',
     },
   },
 ];

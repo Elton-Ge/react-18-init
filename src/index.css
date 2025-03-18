@@ -35,7 +35,7 @@
     @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300;
   }
   .card {
-    @apply bg-white rounded-xl shadow-md p-6;
+    @apply bg-red-600 rounded-xl shadow-md p-6;
   }
   .input {
     @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
