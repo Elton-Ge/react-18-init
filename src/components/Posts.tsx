@@ -17,15 +17,20 @@ const Posts = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto p-4">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800">Posts from JSONPlaceholder</h2>
+        <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">
+          Posts from JSONPlaceholder
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse"
+            >
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
               <div className="space-y-3">
-                <div className="h-4 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
               </div>
             </div>
           ))}
@@ -67,18 +72,22 @@ const Posts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Posts from JSONPlaceholder</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">
+        Posts from JSONPlaceholder
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.slice(0, 6).map((post) => (
           <Link
             key={post.id}
-            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
             to="/posts/$postId"
             params={{ postId: post.id }}
           >
-            <h3 className="text-xl font-semibold mb-3 text-gray-800 line-clamp-2">{post.title}</h3>
-            <p className="text-gray-600 line-clamp-3">{post.body}</p>
-            <div className="mt-4 flex items-center text-blue-600 font-medium">
+            <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200 line-clamp-2">
+              {post.title}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 line-clamp-3">{post.body}</p>
+            <div className="mt-4 flex items-center text-blue-600 dark:text-blue-400 font-medium">
               Read more
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path

@@ -17,13 +17,13 @@ const Post = ({ postId }: { postId: string }) => {
   if (isLoading) {
     return (
       <div className="container mx-auto p-8">
-        <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-          <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse">
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
           </div>
         </div>
       </div>
@@ -63,16 +63,16 @@ const Post = ({ postId }: { postId: string }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
-        <div className="text-sm text-gray-500 mb-4">Post ID: {postId}</div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">{data?.title}</h1>
-        <div className="prose prose-lg text-gray-600">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-3xl mx-auto">
+        <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">Post ID: {postId}</div>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">{data?.title}</h1>
+        <div className="prose prose-lg text-gray-600 dark:text-gray-300">
           <p className="whitespace-pre-wrap">{data?.body}</p>
         </div>
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
           <Link
             to="/posts"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
