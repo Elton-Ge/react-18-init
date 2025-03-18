@@ -14,6 +14,6 @@ export const PostPage = () => {
 export const Route = createFileRoute('/posts/$postId')({
   component: PostPage,
   validateSearch: z.object({
-    mysearch: z.string().catch('1'),
+    mysearch: z.number().catch(1),
   }),
 });
