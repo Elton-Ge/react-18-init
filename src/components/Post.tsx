@@ -72,6 +72,7 @@ const Post = ({ postId }: { postId: string }) => {
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
           <Link
             to="/posts"
+            search={{ page: Number(new URLSearchParams(window.location.search).get('page') || 1) }}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

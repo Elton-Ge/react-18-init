@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 
 export interface PostType {
   id: string;
@@ -9,10 +9,19 @@ export interface PostType {
 }
 
 const Posts = () => {
+  const { page = 1 } = useSearch({ from: '/posts/' });
+  const navigate = useNavigate({ from: '/posts' });
+  const postsPerPage = 6;
+
   const { isLoading, error, data } = useQuery<PostType[]>({
     queryKey: ['posts'],
     queryFn: () => fetch('https://jsonplaceholder.typicode.com/posts').then((res) => res.json()),
   });
+
+  const totalPages = data ? Math.ceil(data.length / postsPerPage) : 0;
+  const startIndex = (page - 1) * postsPerPage;
+  const endIndex = startIndex + postsPerPage;
+  const currentPosts = data?.slice(startIndex, endIndex);
 
   if (isLoading) {
     return (
@@ -76,12 +85,13 @@ const Posts = () => {
         Posts from JSONPlaceholder
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.slice(0, 6).map((post) => (
+        {currentPosts?.map((post) => (
           <Link
             key={post.id}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
             to="/posts/$postId"
             params={{ postId: post.id }}
+            search={{ page }}
           >
             <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200 line-clamp-2">
               {post.title}
@@ -101,7 +111,30 @@ const Posts = () => {
           </Link>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-2 mt-8">
+          <button
+            onClick={() => navigate({ search: { page: Math.max(page - 1, 1) } })}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors"
+          >
+            Previous
+          </button>
+          <span className="text-gray-700 dark:text-gray-300">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => navigate({ search: { page: Math.min(page + 1, totalPages) } })}
+            disabled={page === totalPages}
+            className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
+
 export default Posts;
