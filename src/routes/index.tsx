@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-// import ExampleQuery from '../components/ExampleQuery';
-
 const Home = () => {
   return <div>Home</div>;
 };
