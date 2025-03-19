@@ -31,6 +31,12 @@ const RootLayout = () => {
               >
                 Posts
               </Link>
+              <Link
+                to="/music"
+                className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-medium [&.active]:text-blue-600 dark:[&.active]:text-blue-400 [&.active]:font-semibold"
+              >
+                Music
+              </Link>
             </div>
             <button
               onClick={toggleTheme}
