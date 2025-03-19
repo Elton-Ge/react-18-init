@@ -1,6 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
+import { NotFound } from '../components/NotFound';
 
 const RootLayout = () => {
   const { theme, toggleTheme } = useTheme();
@@ -48,6 +49,7 @@ const RootLayout = () => {
 };
 
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
   component: () => (
     <ThemeProvider>
       <RootLayout />
