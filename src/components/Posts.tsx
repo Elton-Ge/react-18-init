@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export interface PostType {
   id: string;
@@ -22,6 +23,12 @@ const Posts = () => {
   const startIndex = (page - 1) * postsPerPage;
   const endIndex = startIndex + postsPerPage;
   const currentPosts = data?.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    if (totalPages > 1 && (page < 1 || page > totalPages)) {
+      navigate({ search: { page: Math.max(1, Math.min(page || 1, totalPages)) }, replace: true });
+    }
+  }, [page, totalPages, navigate]);
 
   if (isLoading) {
     return (
