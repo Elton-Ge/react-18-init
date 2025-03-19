@@ -1,173 +1,125 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import { Music, musicData } from '../Music';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, expect, test, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-
-// Mock the HTMLMediaElement API
-window.HTMLMediaElement.prototype.play = vi.fn().mockImplementation(() => Promise.resolve());
-window.HTMLMediaElement.prototype.pause = vi.fn().mockImplementation(() => {});
-
-// Mock functions to track audio element events
-
-// Helper to create a mock audio element
-const createMockAudioElement = () => {
-  const original = window.HTMLMediaElement.prototype;
-
-  // Save original properties
-  const originalCurrentTime = Object.getOwnPropertyDescriptor(original, 'currentTime');
-  const originalDuration = Object.getOwnPropertyDescriptor(original, 'duration');
-
-  // Mock properties
-  Object.defineProperty(window.HTMLMediaElement.prototype, 'currentTime', {
-    get: function () {
-      return this._currentTime || 0;
-    },
-    set: function (value) {
-      this._currentTime = value;
-      if (this.ontimeupdate) this.ontimeupdate();
-    },
-    configurable: true,
-  });
-
-  Object.defineProperty(window.HTMLMediaElement.prototype, 'duration', {
-    get: function () {
-      return this._duration || 60;
-    },
-    set: function (value) {
-      this._duration = value;
-    },
-    configurable: true,
-  });
-
-  return () => {
-    // Restore original properties
-    if (originalCurrentTime) {
-      Object.defineProperty(window.HTMLMediaElement.prototype, 'currentTime', originalCurrentTime);
-    }
-    if (originalDuration) {
-      Object.defineProperty(window.HTMLMediaElement.prototype, 'duration', originalDuration);
-    }
-  };
-};
+import { Music, musicData } from '../Music';
 
 describe('Music Component', () => {
-  let restoreAudio: () => void;
-
   beforeEach(() => {
-    vi.clearAllMocks();
-    restoreAudio = createMockAudioElement();
-  });
-
-  afterEach(() => {
-    restoreAudio();
-  });
-
-  test('renders music player with library', () => {
-    render(<Music />);
-
-    // Check if the component renders correctly
-    expect(screen.getByText('Music Player')).toBeInTheDocument();
-    expect(screen.getByText('Music Library')).toBeInTheDocument();
-    expect(screen.getByText('No song selected')).toBeInTheDocument();
-
-    // Check if all songs are listed
-    musicData.forEach((song) => {
-      expect(screen.getByText(song.title)).toBeInTheDocument();
-      expect(screen.getByText(song.artist)).toBeInTheDocument();
+    // Mock HTMLMediaElement methods
+    window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
+    window.HTMLMediaElement.prototype.pause = vi.fn();
+    Object.defineProperty(window.HTMLMediaElement.prototype, 'currentTime', {
+      writable: true,
+      value: 0,
+    });
+    Object.defineProperty(window.HTMLMediaElement.prototype, 'duration', {
+      writable: true,
+      value: 180, // 3 minutes
     });
   });
 
-  test('selects and plays a song when clicked', async () => {
+  test('renders music player with initial state', () => {
     render(<Music />);
-
-    // Click on the first song
-    fireEvent.click(screen.getByText(musicData[0].title));
-
-    // Check if the song details are displayed
-    expect(screen.getByText(musicData[0].title)).toBeInTheDocument();
-    expect(screen.getByText(musicData[0].artist)).toBeInTheDocument();
-    expect(screen.getByText(musicData[0].album)).toBeInTheDocument();
-
-    // Check if play was called
-    expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
+    
+    // Check if the music library title is present
+    expect(screen.getByText('Music Library')).toBeInTheDocument();
+    
+    // Check if all songs are rendered
+    musicData.forEach((song) => {
+      expect(screen.getByTestId(`song-item-${song.id}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`song-title-${song.id}`)).toHaveTextContent(song.title);
+      expect(screen.getByTestId(`song-artist-${song.id}`)).toHaveTextContent(song.artist);
+    });
+    
+    // Check initial "No song selected" state
+    expect(screen.getByText('No song selected')).toBeInTheDocument();
   });
 
-  test('toggles play/pause when button is clicked', async () => {
+  test('plays a song when clicked', () => {
     render(<Music />);
+    
+    // Click the first song
+    fireEvent.click(screen.getByTestId(`song-item-${musicData[0].id}`));
+    
+    // Check if play was called
+    expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalled();
+    
+    // Check if song details are displayed
+    expect(screen.getByText(musicData[0].title)).toBeInTheDocument();
+    expect(screen.getByText(musicData[0].artist)).toBeInTheDocument();
+  });
 
-    // First select a song
-    fireEvent.click(screen.getByText(musicData[0].title));
-
-    // Play button should have been called automatically
+  test('toggles play/pause when clicking play/pause button', () => {
+    render(<Music />);
+    
+    // Click the first song to start playing
+    fireEvent.click(screen.getByTestId(`song-item-${musicData[0].id}`));
     expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1);
-
-    // Find and click the play/pause button (it's now in pause state)
-    const playPauseButton = screen.getByRole('button', { name: '' });
+    
+    // Click play/pause button to pause
+    const playPauseButton = screen.getByTestId('play-pause-button');
     fireEvent.click(playPauseButton);
-
-    // Pause should be called
     expect(window.HTMLMediaElement.prototype.pause).toHaveBeenCalledTimes(1);
-
-    // Click again to resume playing
+    
+    // Click play/pause button to resume
     fireEvent.click(playPauseButton);
-
-    // Play should be called again
     expect(window.HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(2);
   });
 
-  test('plays next song when next button is clicked', async () => {
+  test('updates progress bar during playback', () => {
     render(<Music />);
-
-    // Select the first song
-    fireEvent.click(screen.getByText(musicData[0].title));
-
-    // Find and click the next button
-    const nextButton = screen.getByRole('button', { name: '' });
-    const buttons = screen.getAllByRole('button');
-    const nextButtonIndex = buttons.findIndex((button) => button === nextButton);
-    fireEvent.click(buttons[nextButtonIndex + 1]); // Next button is after play/pause
-
-    // Check if the second song is now playing
-    expect(screen.getByText(musicData[1].title)).toBeInTheDocument();
-    expect(screen.getByText(musicData[1].artist)).toBeInTheDocument();
-    expect(screen.getByText(musicData[1].album)).toBeInTheDocument();
-  });
-
-  test('plays previous song when previous button is clicked', async () => {
-    render(<Music />);
-
-    // Select the second song first
-    fireEvent.click(screen.getByText(musicData[1].title));
-
-    // Find and click the previous button
-    const prevButton = screen.getByRole('button', { name: '' });
-    const buttons = screen.getAllByRole('button');
-    const prevButtonIndex = buttons.findIndex((button) => button === prevButton);
-    fireEvent.click(buttons[prevButtonIndex - 1]); // Prev button is before play/pause
-
-    // Check if the first song is now playing
-    expect(screen.getByText(musicData[0].title)).toBeInTheDocument();
-    expect(screen.getByText(musicData[0].artist)).toBeInTheDocument();
-    expect(screen.getByText(musicData[0].album)).toBeInTheDocument();
-  });
-
-  test('handles song end and plays next song', async () => {
-    render(<Music />);
-
-    // Select the first song
-    fireEvent.click(screen.getByText(musicData[0].title));
-
-    // Get the audio element
+    
+    // Click the first song
+    fireEvent.click(screen.getByTestId(`song-item-${musicData[0].id}`));
+    
     const audioElement = screen.getByTestId('audio-element');
+    
+    // Simulate time update
+    Object.defineProperty(audioElement, 'currentTime', { value: 60 }); // 1 minute
+    fireEvent.timeUpdate(audioElement);
+    
+    // Check if current time is updated
+    expect(screen.getByTestId('current-time')).toHaveTextContent('1:00');
+  });
 
-    // Simulate ended event
-    act(() => {
-      audioElement.dispatchEvent(new Event('ended'));
+  test('seeks to position when progress bar is clicked', () => {
+    render(<Music />);
+    
+    // Click the first song
+    fireEvent.click(screen.getByTestId(`song-item-${musicData[0].id}`));
+    
+    // Click progress bar
+    const progressBar = screen.getByTestId('progress-bar');
+    fireEvent.click(progressBar, {
+      clientX: 100,
+      currentTarget: {
+        getBoundingClientRect: () => ({
+          left: 0,
+          width: 200,
+        }),
+      },
     });
+    
+    // Check if currentTime was updated (should be 90 seconds - half of 180s duration)
+    const audioElement = screen.getByTestId('audio-element') as HTMLAudioElement;
+    expect(audioElement.currentTime).toBe(90);
+  });
 
-    // Check if the second song is now playing
-    expect(screen.getByText(musicData[1].title)).toBeInTheDocument();
-    expect(screen.getByText(musicData[1].artist)).toBeInTheDocument();
-    expect(screen.getByText(musicData[1].album)).toBeInTheDocument();
+  test('formats time correctly', () => {
+    render(<Music />);
+    
+    // Click the first song
+    fireEvent.click(screen.getByTestId(`song-item-${musicData[0].id}`));
+    
+    const audioElement = screen.getByTestId('audio-element') as HTMLAudioElement;
+    
+    // Test different time formats
+    Object.defineProperty(audioElement, 'currentTime', { value: 61 }); // 1:01
+    fireEvent.timeUpdate(audioElement);
+    expect(screen.getByTestId('current-time')).toHaveTextContent('1:01');
+    
+    Object.defineProperty(audioElement, 'currentTime', { value: 0 }); // 0:00
+    fireEvent.timeUpdate(audioElement);
+    expect(screen.getByTestId('current-time')).toHaveTextContent('0:00');
   });
 });

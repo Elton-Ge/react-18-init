@@ -22,7 +22,7 @@ export const musicData: Song[] = [
     artist: 'The Weeknd',
     album: 'After Hours',
     cover: '/album-covers/the-weeknd.jpg',
-    duration: '3:20',
+    duration: '3:01',
     audioSrc: '/audio/song1.mp3',
   },
   {
@@ -31,7 +31,7 @@ export const musicData: Song[] = [
     artist: 'Post Malone',
     album: "Hollywood's Bleeding",
     cover: '/album-covers/post-malone.jpg',
-    duration: '3:35',
+    duration: '1:38',
     audioSrc: '/audio/song2.mp3',
   },
   {
@@ -40,7 +40,7 @@ export const musicData: Song[] = [
     artist: 'Dua Lipa',
     album: 'Future Nostalgia',
     cover: '/album-covers/dua-lipa.jpg',
-    duration: '3:03',
+    duration: '3:08',
     audioSrc: '/audio/song3.mp3',
   },
 ];
@@ -170,6 +170,7 @@ export const Music = () => {
             {musicData.map((song) => (
               <div
                 key={song.id}
+                data-testid={`song-item-${song.id}`}
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors ${currentSong?.id === song.id ? 'bg-blue-50 dark:bg-blue-900/30' : 'hover:bg-gray-100 dark:hover:bg-gray-700/50'}`}
                 onClick={() => handlePlaySong(song)}
               >
@@ -179,10 +180,10 @@ export const Music = () => {
                   className="w-12 h-12 rounded-md object-cover shadow-sm"
                 />
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 truncate">
+                  <div className="text-base font-medium text-gray-800 dark:text-gray-200 truncate" data-testid={`song-title-${song.id}`}>
                     {song.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{song.artist}</p>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate" data-testid={`song-artist-${song.id}`}>{song.artist}</p>
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-400">{song.duration}</span>
               </div>
@@ -191,7 +192,7 @@ export const Music = () => {
         </div>
 
         {/* Music Player - Right Side */}
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col" role="region" aria-label="Music Player">
           {currentSong ? (
             <>
               <div className="flex-1 flex flex-col items-center justify-center mb-8">
@@ -202,9 +203,9 @@ export const Music = () => {
                 />
 
                 <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
                     {currentSong.title}
-                  </h2>
+                  </div>
                   <p className="text-lg text-gray-600 dark:text-gray-400 mb-1">
                     {currentSong.artist}
                   </p>
@@ -216,15 +217,18 @@ export const Music = () => {
                   <div
                     className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden cursor-pointer"
                     onClick={handleProgressClick}
+                    role="progressbar"
+                    data-testid="progress-bar"
                   >
                     <div
                       className="h-full bg-blue-600 dark:bg-blue-500 rounded-full"
                       style={{ width: `${(currentTime / duration) * 100 || 0}%` }}
+                      data-testid="progress-bar-fill"
                     ></div>
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
+                    <span data-testid="current-time">{formatTime(currentTime)}</span>
+                    <span data-testid="duration">{formatTime(duration)}</span>
                   </div>
                 </div>
 
@@ -233,6 +237,7 @@ export const Music = () => {
                   <button
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
                     onClick={playPreviousSong}
+                    aria-label="Previous song"
                   >
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -247,6 +252,8 @@ export const Music = () => {
                   <button
                     className="bg-blue-600 dark:bg-blue-500 text-white rounded-full p-3 hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     onClick={togglePlayPause}
+                    aria-label={isPlaying ? 'Pause' : 'Play'}
+                    data-testid="play-pause-button"
                   >
                     {isPlaying ? (
                       <svg
@@ -288,6 +295,7 @@ export const Music = () => {
                   <button
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
                     onClick={playNextSong}
+                    aria-label="Next song"
                   >
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path

@@ -17,7 +17,7 @@ const Post = ({ postId }: { postId: string }) => {
   if (isLoading) {
     return (
       <div className="container mx-auto p-8">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse" data-testid="loading-skeleton">
           <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
           <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
           <div className="space-y-3">
