@@ -196,7 +196,7 @@ export const Music = () => {
 
           <div className="space-y-4">
             {musicData.map((song) => (
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+              //   eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
               <div
                 key={song.id}
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors ${currentSong?.id === song.id ? 'bg-blue-50 dark:bg-blue-900/30' : 'hover:bg-gray-100 dark:hover:bg-gray-700/50'}`}
@@ -242,7 +242,7 @@ export const Music = () => {
 
                 {/* Progress Bar */}
                 <div className="w-full max-w-md mb-4">
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                  {/* // eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <div
                     className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden cursor-pointer"
                     onClick={handleProgressClick}
