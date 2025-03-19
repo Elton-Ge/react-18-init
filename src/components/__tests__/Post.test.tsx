@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
@@ -17,7 +16,12 @@ vi.mock('node:fetch', () => ({
 }));
 
 // Create a real Post component mock that we can control
-const MockPostComponent = ({ postId, status, error, data }: { 
+const MockPostComponent = ({
+  postId,
+  status,
+  error,
+  data,
+}: {
   postId: string;
   status: 'loading' | 'error' | 'success';
   error?: Error;
@@ -26,7 +30,10 @@ const MockPostComponent = ({ postId, status, error, data }: {
   if (status === 'loading') {
     return (
       <div className="container mx-auto p-8">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse" data-testid="loading-skeleton">
+        <div
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 animate-pulse"
+          data-testid="loading-skeleton"
+        >
           <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div>
           <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
           <div className="space-y-3">
@@ -116,19 +123,13 @@ describe('Post Component Tests', () => {
 
   test('renders loading state initially', () => {
     render(<MockPostComponent postId="1" status="loading" />);
-    
+
     // Check for loading skeleton elements
     expect(screen.getByTestId('loading-skeleton')).toBeInTheDocument();
   });
 
   test('renders post data when fetch is successful', () => {
-    render(
-      <MockPostComponent 
-        postId="1" 
-        status="success" 
-        data={mockPost} 
-      />
-    );
+    render(<MockPostComponent postId="1" status="success" data={mockPost} />);
 
     // Check content and back button
     expect(screen.getByText('Test Post Title')).toBeInTheDocument();
@@ -139,41 +140,25 @@ describe('Post Component Tests', () => {
 
   test('renders error state when fetch fails', () => {
     render(
-      <MockPostComponent 
-        postId="1" 
-        status="error" 
-        error={new Error('HTTP error! status: 404')} 
-      />
+      <MockPostComponent postId="1" status="error" error={new Error('HTTP error! status: 404')} />
     );
-    
+
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText('HTTP error! status: 404')).toBeInTheDocument();
   });
 
   test('renders error state when fetch throws an error', () => {
-    render(
-      <MockPostComponent 
-        postId="1" 
-        status="error" 
-        error={new Error('Network error')} 
-      />
-    );
-    
+    render(<MockPostComponent postId="1" status="error" error={new Error('Network error')} />);
+
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText('Network error')).toBeInTheDocument();
   });
 
   test('has back button to posts page', () => {
-    render(
-      <MockPostComponent 
-        postId="1" 
-        status="success" 
-        data={mockPost} 
-      />
-    );
+    render(<MockPostComponent postId="1" status="success" data={mockPost} />);
 
     // Verify back button exists and links to posts
     const backButton = screen.getByText('Back to Posts');
     expect(backButton.closest('a')).toHaveAttribute('href', '/posts');
   });
-}); 
+});

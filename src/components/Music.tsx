@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -180,10 +181,18 @@ export const Music = () => {
                   className="w-12 h-12 rounded-md object-cover shadow-sm"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="text-base font-medium text-gray-800 dark:text-gray-200 truncate" data-testid={`song-title-${song.id}`}>
+                  <div
+                    className="text-base font-medium text-gray-800 dark:text-gray-200 truncate"
+                    data-testid={`song-title-${song.id}`}
+                  >
                     {song.title}
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate" data-testid={`song-artist-${song.id}`}>{song.artist}</p>
+                  <p
+                    className="text-sm text-gray-600 dark:text-gray-400 truncate"
+                    data-testid={`song-artist-${song.id}`}
+                  >
+                    {song.artist}
+                  </p>
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-400">{song.duration}</span>
               </div>
@@ -192,7 +201,11 @@ export const Music = () => {
         </div>
 
         {/* Music Player - Right Side */}
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col" role="region" aria-label="Music Player">
+        <div
+          className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col"
+          role="region"
+          aria-label="Music Player"
+        >
           {currentSong ? (
             <>
               <div className="flex-1 flex flex-col items-center justify-center mb-8">
