@@ -9,7 +9,9 @@
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "preview": "vite preview",
-    "tsr": "tsr watch"
+    "tsr": "tsr watch",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.25",
@@ -22,6 +24,9 @@
     "@eslint/js": "^8.56.0",
     "@tanstack/react-router-devtools": "^1.114.23",
     "@tanstack/router-plugin": "^1.114.23",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.13.10",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
@@ -37,10 +42,12 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-tailwindcss": "^3.18.0",
     "globals": "^13.24.0",
+    "jsdom": "^26.0.0",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "tailwindcss": "^3.4.1",
     "typescript": "~5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.0.12",
+    "vitest": "^3.0.9"
   }
 }

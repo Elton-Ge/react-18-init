@@ -15,16 +15,7 @@ interface Song {
 }
 
 // Sample music data
-const musicData: Song[] = [
-  {
-    id: '3',
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    album: 'Future Nostalgia',
-    cover: '/album-covers/dua-lipa.jpg',
-    duration: '3:23',
-    audioSrc: '/audio/song3.mp3',
-  },
+export const musicData: Song[] = [
   {
     id: '4',
     title: 'Blinding Lights',
@@ -51,24 +42,6 @@ const musicData: Song[] = [
     cover: '/album-covers/dua-lipa.jpg',
     duration: '3:03',
     audioSrc: '/audio/song3.mp3',
-  },
-  {
-    id: '7',
-    title: 'Watermelon Sugar',
-    artist: 'Harry Styles',
-    album: 'Fine Line',
-    cover: '/album-covers/harry-styles.jpg',
-    duration: '2:54',
-    audioSrc: '/audio/song1.mp3',
-  },
-  {
-    id: '8',
-    title: 'Bad Guy',
-    artist: 'Billie Eilish',
-    album: 'When We All Fall Asleep, Where Do We Go?',
-    cover: '/album-covers/billie-eilish.jpg',
-    duration: '3:14',
-    audioSrc: '/audio/song2.mp3',
   },
 ];
 
@@ -184,6 +157,7 @@ export const Music = () => {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
+        data-testid="audio-element"
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Music List - Left Side */}
